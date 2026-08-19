@@ -40,6 +40,24 @@ Custom_NanoSecondDelay(IN UINTN NanoSeconds) {
     return NanoSeconds;
 }
 
+//TODO: there is another possible implementation:
+/*EFI_EVENT Event;
+
+ gBS->CreateEvent (
+    EVT_TIMER,
+    TPL_CALLBACK,
+    NULL,
+    NULL,
+    &Event
+);
+
+gBS->SetTimer (
+    Event,
+    TimerRelative,
+    10 * 1000 * 10
+);
+ */
+
 
 int nanosleep(const struct timespec* __req, struct timespec* __rem) {
     // The nanosleep() function is not available on uefi. Therefore, we will call

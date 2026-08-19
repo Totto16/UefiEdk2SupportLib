@@ -22,3 +22,20 @@ extern UINT64 gTimerPeriod;
 extern EFI_TIMER_ARCH_PROTOCOL* gTimerAp;
 extern EFI_EVENT gTimerEvent;
 extern VOID* gRegistration;
+
+/**
+  The constructor function enables ACPI IO space, and caches PerformanceCounterFrequency.
+
+  @retval EFI_SUCCESS   The constructor always returns RETURN_SUCCESS.
+
+**/
+EFI_STATUS
+CommonAcpiTimerLibConstructor(VOID);
+
+
+//
+// Cached performance counter frequency
+//
+extern UINT64 mAcpiTimerLibTscFrequency;
+
+extern GUID mFrequencyHobGuid;
