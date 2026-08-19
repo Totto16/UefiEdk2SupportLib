@@ -22,7 +22,7 @@
   UefiLib
 # StdLib
   LibC
-  LibCType
+  LibCtype
   LibLocale
   LibMath
   LibSignal
@@ -33,7 +33,8 @@
   LibUefi
   LibWchar
   LibGdtoa
-
+#
+  PcdLib
 
 
 [BuildOptions]
@@ -55,3 +56,8 @@
 
 [Protocols]
   gEfiTimerArchProtocolGuid
+
+
+[Pcd.IA32, Pcd.X64]
+  gEfiMdePkgTokenSpaceGuid.PcdFSBClock  ## CONSUMES
+

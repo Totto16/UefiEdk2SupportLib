@@ -20,7 +20,7 @@
   UefiLib
 # StdLib
   LibC
-  LibCType
+  LibCtype
   LibLocale
   LibMath
   LibSignal
