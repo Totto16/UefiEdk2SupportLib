@@ -6,7 +6,7 @@
 #include <time.h>
 
 #ifndef __UEFI__
-#  error "Only supported on UEFI"
+#error "Only supported on UEFI"
 #endif
 
 #ifdef __cplusplus

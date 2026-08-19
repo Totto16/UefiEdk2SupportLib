@@ -1,4 +1,4 @@
-#include "../include/clock.h"
+#include <SupportLib/clock.h>
 
 #include <errno.h>
 
@@ -7,28 +7,6 @@
 #include <Library/TimerLib.h>
 #include <Uefi.h>
 
-#if defined(_OOPETRIS_SUPPORT_PKG_USE_TIMERLIB)
-#define SUPPORT_PERFORMANCE_COUNTER_PROPS GetPerformanceCounterProperties
-#define SUPPORT_PERFORMANCE_COUNTER_GET GetPerformanceCounter
-#else
-#define SUPPORT_PERFORMANCE_COUNTER_PROPS Custom_GetPerformanceCounterProperties
-#define SUPPORT_PERFORMANCE_COUNTER_GET Custom_GetPerformanceCounter
-
-int Custom_GetPerformanceCounterProperties() {
-    // partially from EmulatorPkg/Library/DxeTimerLib/DxeTimerLib.c
-    //TODO
-    return 1;
-}
-
-int Custom_GetPerformanceCounter() {
-    // partially from EmulatorPkg/Library/DxeTimerLib/DxeTimerLib.c
-    //TODO
-    return 1;
-}
-#endif
-
-//TODO
-#if defined(_OOPETRIS_SUPPORT_PKG_USE_TIMERLIB)
 
 static EFI_STATUS ClockGetTimeMonotonic(OUT struct timespec* Ts) {
     UINT64 Counter;
@@ -40,13 +18,13 @@ static EFI_STATUS ClockGetTimeMonotonic(OUT struct timespec* Ts) {
         return EFI_INVALID_PARAMETER;
     }
 
-    Frequency = SUPPORT_PERFORMANCE_COUNTER_PROPS(&Start, &End);
+    Frequency = GetPerformanceCounterProperties(&Start, &End);
 
     if (Frequency == 0) {
         return EFI_UNSUPPORTED;
     }
 
-    Counter = SUPPORT_PERFORMANCE_COUNTER_GET();
+    Counter = GetPerformanceCounter();
 
     Ts->tv_sec = (INT64) (Counter / Frequency);
 
@@ -55,16 +33,6 @@ static EFI_STATUS ClockGetTimeMonotonic(OUT struct timespec* Ts) {
     return EFI_SUCCESS;
 }
 
-#else
-
-
-static EFI_STATUS ClockGetTimeMonotonic(OUT struct timespec* Ts) {
-    //TODO
-    return EFI_UNSUPPORTED;
-}
-
-
-#endif
 int clock_gettime(clockid_t clockid, struct timespec* tp) {
     switch (clockid) {
         case CLOCK_REALTIME:
@@ -81,7 +49,7 @@ int clock_gettime(clockid_t clockid, struct timespec* tp) {
         case CLOCK_MONOTONIC:
             EFI_STATUS status = ClockGetTimeMonotonic(tp);
             if (EFI_ERROR(status)) {
-                errno = status;
+                errno = status & ~MAX_BIT;
                 return -1;
             }
             return 0;

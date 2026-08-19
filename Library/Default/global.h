@@ -1,6 +1,3 @@
-
-
-
 #pragma once
 
 
@@ -12,10 +9,6 @@
 #error "only supported in C"
 #endif
 
-
-#if defined(_OOPETRIS_SUPPORT_PKG_USE_TIMERLIB)
-
-#else
 
 #include <Uefi.h>
 
@@ -29,6 +22,3 @@ extern UINT64 gTimerPeriod;
 extern EFI_TIMER_ARCH_PROTOCOL* gTimerAp;
 extern EFI_EVENT gTimerEvent;
 extern VOID* gRegistration;
-
-
-#endif

@@ -1,0 +1,53 @@
+[Defines]
+  INF_VERSION = 1.25
+  BASE_NAME = SupportLibTimerImpl
+  FILE_GUID = 22494312-cffa-42c7-b82d-1ac7f8175cb2
+  MODULE_TYPE = BASE
+  VERSION_STRING = 1.0.0
+  LIBRARY_CLASS = LibUEfiSupport|UEFI_APPLICATION
+
+
+[Sources]
+  src/clock.c
+  src/nanosleep.c
+
+[Packages]
+  MdePkg/MdePkg.dec
+  StdLib/StdLib.dec
+
+[LibraryClasses]
+# MdePkg
+  UefiLib
+# StdLib
+  LibC
+  LibCType
+  LibLocale
+  LibMath
+  LibSignal
+  LibStdio
+  LibStdLib
+  LibString
+  LibTime
+  LibUefi
+  LibWchar
+  LibGdtoa
+#
+  TimerLib
+
+
+
+[BuildOptions]
+  *_*_*_CC_FLAGS  = -std=c11
+
+  *_*_*_CC_FLAGS = -D__UEFI__
+  *_*_*_CC_FLAGS = "-DEFIAPI=__attribute__((ms_abi))"
+
+  *_*_*_CC_FLAGS = -fvisibility=hidden
+  *_*_*_CC_FLAGS = -D_REENTRANT
+  *_*_*_CCONLY_FLAGS = -I$(MODULE_DIR)/include
+  *_*_*_CCONLY_FLAGS = -I$(MODULE_DIR)/src
+
+  *_*_*_CC_FLAGS = -I$(WORKSPACE)/StdLib/Include
+
+[BuildOptions.X64]
+  *_*_*_CC_FLAGS = -I$(WORKSPACE)/StdLib/Include/X64

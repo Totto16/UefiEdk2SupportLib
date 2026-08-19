@@ -1,29 +1,6 @@
 
 
-#include "../include/global.h"
-
-#include <Library/TimerLib.h>
-
-
-#if defined(_OOPETRIS_SUPPORT_PKG_USE_TIMERLIB)
-/**
-  Register for the Timer AP protocol.
-
-  @param  ImageHandle   The firmware allocated handle for the EFI image.
-  @param  SystemTable   A pointer to the EFI System Table.
-
-  @retval EFI_SUCCESS   The constructor always returns EFI_SUCCESS.
-
-**/
-EFI_STATUS
-EFIAPI
-OOpetrisSupportLibConstructor(IN EFI_HANDLE ImageHandle, IN EFI_SYSTEM_TABLE* SystemTable) {
-
-    return EFI_SUCCESS;
-}
-#else
-
-#include <Library/DebugLib.h>
+#include "./global.h"
 
 
 UINT64 gTimerPeriod = 0;
@@ -62,7 +39,7 @@ VOID EFIAPI RegisterTimerArchProtocol(IN EFI_EVENT Event, IN VOID* Context) {
 **/
 EFI_STATUS
 EFIAPI
-OOpetrisSupportLibConstructor(IN EFI_HANDLE ImageHandle, IN EFI_SYSTEM_TABLE* SystemTable) {
+OOpetrisSupportLibConstructorDefault(IN EFI_HANDLE ImageHandle, IN EFI_SYSTEM_TABLE* SystemTable) {
     EfiCreateProtocolNotifyEvent(
             &gEfiTimerArchProtocolGuid, TPL_CALLBACK, RegisterTimerArchProtocol, NULL, &gRegistration
     );
@@ -71,9 +48,7 @@ OOpetrisSupportLibConstructor(IN EFI_HANDLE ImageHandle, IN EFI_SYSTEM_TABLE* Sy
 }
 
 
-#endif
-
-//TODO: there is a third possible implementation:
+//TODO: there is another possible implementation:
 /*EFI_EVENT Event;
 
  gBS->CreateEvent (

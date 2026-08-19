@@ -1,17 +1,14 @@
 [Defines]
   INF_VERSION = 1.25
-  BASE_NAME = SupportLib
-  FILE_GUID = c70e375c-d580-4789-b84f-49ccf0d11993
-  MODULE_TYPE = DXE_DRIVER
+  BASE_NAME = SupportLibNullImpl
+  FILE_GUID = 6de5ea08-a3fa-4561-b82a-4e408a10430f
+  MODULE_TYPE = BASE
   VERSION_STRING = 1.0.0
   LIBRARY_CLASS = LibUEfiSupport|UEFI_APPLICATION
-
-  CONSTRUCTOR                    = OOpetrisSupportLibConstructor
 
 [Sources]
   src/clock.c
   src/nanosleep.c
-  src/global.c
 
 [Packages]
   MdePkg/MdePkg.dec
@@ -33,8 +30,7 @@
   LibUefi
   LibWchar
   LibGdtoa
-#
-  TimerLib
+
 
 
 
@@ -51,11 +47,5 @@
 
   *_*_*_CC_FLAGS = -I$(WORKSPACE)/StdLib/Include
 
-  *_*_*_CC_FLAGS = $(OOPETRIS_SUPPORT_FLAGS)
-
 [BuildOptions.X64]
   *_*_*_CC_FLAGS = -I$(WORKSPACE)/StdLib/Include/X64
-
-
-[Protocols]
-  gEfiTimerArchProtocolGuid

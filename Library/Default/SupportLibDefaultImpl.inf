@@ -1,0 +1,57 @@
+[Defines]
+  INF_VERSION = 1.25
+  BASE_NAME = SupportLibDefaultImpl
+  FILE_GUID = fcbe5800-d8ad-45fd-9697-59e199b5e0dd
+  MODULE_TYPE = DXE_DRIVER
+  VERSION_STRING = 1.0.0
+  LIBRARY_CLASS = LibUEfiSupport|UEFI_APPLICATION
+
+  CONSTRUCTOR                    = OOpetrisSupportLibConstructorDefault
+
+[Sources]
+  src/clock.c
+  src/nanosleep.c
+  src/global.c
+
+[Packages]
+  MdePkg/MdePkg.dec
+  StdLib/StdLib.dec
+
+[LibraryClasses]
+# MdePkg
+  UefiLib
+# StdLib
+  LibC
+  LibCType
+  LibLocale
+  LibMath
+  LibSignal
+  LibStdio
+  LibStdLib
+  LibString
+  LibTime
+  LibUefi
+  LibWchar
+  LibGdtoa
+
+
+
+[BuildOptions]
+  *_*_*_CC_FLAGS  = -std=c11
+
+  *_*_*_CC_FLAGS = -D__UEFI__
+  *_*_*_CC_FLAGS = "-DEFIAPI=__attribute__((ms_abi))"
+
+  *_*_*_CC_FLAGS = -fvisibility=hidden
+  *_*_*_CC_FLAGS = -D_REENTRANT
+  *_*_*_CCONLY_FLAGS = -I$(MODULE_DIR)/include
+  *_*_*_CCONLY_FLAGS = -I$(MODULE_DIR)/src
+
+  *_*_*_CC_FLAGS = -I$(WORKSPACE)/StdLib/Include
+
+[BuildOptions.X64]
+  *_*_*_CC_FLAGS = -I$(WORKSPACE)/StdLib/Include/X64
+
+
+[Protocols]
+  gEfiTimerArchProtocolGuid

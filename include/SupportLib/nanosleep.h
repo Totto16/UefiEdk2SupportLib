@@ -7,16 +7,16 @@
 //
 //===----------------------------------------------------------------------===//
 
-#ifndef _LIBCPP___SUPPORT_UEFI_NANOSLEEP_H
-#define _LIBCPP___SUPPORT_UEFI_NANOSLEEP_H
+#pragma once
 
 #ifndef __UEFI__
-#  error "Only supported on UEFI"
+#error "Only supported on UEFI"
 #endif
 
-#include <unistd.h>
-#include <time.h>
 #include <sys/time.h>
+#include <time.h>
+#include <unistd.h>
+
 
 #ifdef __cplusplus
 extern "C" {
@@ -27,5 +27,3 @@ int nanosleep(const struct timespec* __req, struct timespec* __rem);
 #ifdef __cplusplus
 }
 #endif
-
-#endif // _LIBCPP___SUPPORT_UEFI_NANOSLEEP_H

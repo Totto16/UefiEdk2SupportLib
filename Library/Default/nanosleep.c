@@ -1,17 +1,6 @@
 
 #include "../include/nanosleep.h"
 
-#include <Library/TimerLib.h>
-
-// TODO: remove
-#include <Library/DebugLib.h>
-
-
-#if defined(_OOPETRIS_SUPPORT_PKG_USE_TIMERLIB)
-#define SUPPORT_DELAY_NANOSECONDS NanoSecondDelay
-#else
-#define SUPPORT_DELAY_NANOSECONDS Custom_NanoSecondDelay
-
 
 #include <Library/BaseLib.h>
 #include <Library/UefiBootServicesTableLib.h>
@@ -28,6 +17,7 @@ Custom_NanoSecondDelay(IN UINTN NanoSeconds) {
     UINT64 HundredNanoseconds;
     UINTN Index;
 
+    //TODO: donm't use asserts, rather return an error value
     ASSERT(gTimerPeriod != 0);
 
     ASSERT((EfiGetCurrentTpl() == TPL_APPLICATION));
@@ -49,7 +39,6 @@ Custom_NanoSecondDelay(IN UINTN NanoSeconds) {
     return NanoSeconds;
 }
 
-#endif
 
 int nanosleep(const struct timespec* __req, struct timespec* __rem) {
     // The nanosleep() function is not available on uefi. Therefore, we will call
@@ -61,7 +50,7 @@ int nanosleep(const struct timespec* __req, struct timespec* __rem) {
 
     UINT64 ns = (UINT64) __req->tv_sec * 1000000000ULL + (UINT64) __req->tv_nsec;
 
-    SUPPORT_DELAY_NANOSECONDS(ns);
+    Custom_NanoSecondDelay(ns);
 
     if (__rem != NULL) {
         __rem->tv_sec = 0;
