@@ -10,7 +10,6 @@
 
 [Sources]
   nanosleep.c
-  global.c
 
 [Packages]
   MdePkg/MdePkg.dec

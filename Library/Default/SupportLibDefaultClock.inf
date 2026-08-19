@@ -10,7 +10,6 @@
 
 [Sources]
   clock.c
-  global.c
 
 [Packages]
   MdePkg/MdePkg.dec
