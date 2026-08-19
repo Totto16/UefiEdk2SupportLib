@@ -1,14 +1,12 @@
 [Defines]
   INF_VERSION = 1.25
-  BASE_NAME = SupportLibTimerImpl
-  FILE_GUID = 22494312-cffa-42c7-b82d-1ac7f8175cb2
+  BASE_NAME = SupportLibNullImpl
+  FILE_GUID = 6de5ea08-a3fa-4561-b82a-4e408a10430e
   MODULE_TYPE = BASE
   VERSION_STRING = 1.0.0
-  LIBRARY_CLASS = LibUEfiSupport|UEFI_APPLICATION
-
+  LIBRARY_CLASS = LibUEfiSupportNanosleep|UEFI_APPLICATION
 
 [Sources]
-  clock.c
   nanosleep.c
 
 [Packages]
@@ -31,8 +29,7 @@
   LibUefi
   LibWchar
   LibGdtoa
-#
-  TimerLib
+
 
 
 

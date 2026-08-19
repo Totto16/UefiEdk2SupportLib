@@ -4,13 +4,12 @@
   FILE_GUID = fcbe5800-d8ad-45fd-9697-59e199b5e0dd
   MODULE_TYPE = DXE_DRIVER
   VERSION_STRING = 1.0.0
-  LIBRARY_CLASS = LibUEfiSupport|UEFI_APPLICATION
+  LIBRARY_CLASS = LibUEfiSupportClock|UEFI_APPLICATION
 
-  CONSTRUCTOR                    = OOpetrisSupportLibConstructorDefault
+  CONSTRUCTOR                    = OOpetrisSupportLibConstructorSupportClockDefault
 
 [Sources]
   clock.c
-  nanosleep.c
   global.c
 
 [Packages]

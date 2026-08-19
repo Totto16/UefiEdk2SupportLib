@@ -10,7 +10,6 @@
 #include <PiDxe.h>
 
 
-
 UINT64 gTimerPeriod = 0;
 EFI_TIMER_ARCH_PROTOCOL* gTimerAp = NULL;
 EFI_EVENT gTimerEvent = NULL;
@@ -49,7 +48,7 @@ UINT64 mAcpiTimerLibTscFrequency = 0;
 **/
 EFI_STATUS
 EFIAPI
-DxeAcpiTimerLibConstructor(IN EFI_HANDLE ImageHandle, IN EFI_SYSTEM_TABLE* SystemTable) {
+OOpetrisSupportLibConstructorSupportClockDefault(IN EFI_HANDLE ImageHandle, IN EFI_SYSTEM_TABLE* SystemTable) {
     return CommonAcpiTimerLibConstructor();
 }
 
@@ -139,16 +138,10 @@ CommonAcpiTimerLibConstructor(VOID) {
 **/
 EFI_STATUS
 EFIAPI
-OOpetrisSupportLibConstructorDefault(IN EFI_HANDLE ImageHandle, IN EFI_SYSTEM_TABLE* SystemTable) {
+OOpetrisSupportLibConstructorSupportNanosleepDefault(IN EFI_HANDLE ImageHandle, IN EFI_SYSTEM_TABLE* SystemTable) {
     EfiCreateProtocolNotifyEvent(
             &gEfiTimerArchProtocolGuid, TPL_CALLBACK, RegisterTimerArchProtocol, NULL, &gRegistration
     );
-    EFI_STATUS Status;
-
-    Status = DxeAcpiTimerLibConstructor(ImageHandle, SystemTable);
-    if (!EFI_ERROR(Status)) {
-        return Status;
-    }
 
 
     return EFI_SUCCESS;

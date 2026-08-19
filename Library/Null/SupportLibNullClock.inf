@@ -4,11 +4,10 @@
   FILE_GUID = 6de5ea08-a3fa-4561-b82a-4e408a10430f
   MODULE_TYPE = BASE
   VERSION_STRING = 1.0.0
-  LIBRARY_CLASS = LibUEfiSupport|UEFI_APPLICATION
+  LIBRARY_CLASS = LibUEfiSupportClock|UEFI_APPLICATION
 
 [Sources]
   clock.c
-  nanosleep.c
 
 [Packages]
   MdePkg/MdePkg.dec

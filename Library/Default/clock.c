@@ -17,6 +17,8 @@
 #include "./global.h"
 
 
+//TODO: this doesn't really work, use another implementation
+
 // parts are from: PcAtChipsetPkg/Library/AcpiTimerLib/AcpiTimerLib.c
 
 GUID mFrequencyHobGuid = {
