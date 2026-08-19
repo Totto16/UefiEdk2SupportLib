@@ -6,6 +6,9 @@
   VERSION_STRING = 1.0.0
   LIBRARY_CLASS = LibUEfiSupportClock|UEFI_APPLICATION
 
+  CONSTRUCTOR                    = OOpetrisSupportLibConstructorSupportClockTimerDefault
+
+
 
 [Sources]
   clock.c
