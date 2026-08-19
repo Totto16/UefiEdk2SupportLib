@@ -14,7 +14,7 @@
 [Packages]
   MdePkg/MdePkg.dec
   StdLib/StdLib.dec
-  PcAtChipsetPkg/PcAtChipsetPkg.dec
+  UefiCpuPkg/UefiCpuPkg.dec
 
 [LibraryClasses]
 # MdePkg
@@ -34,11 +34,8 @@
   LibGdtoa
 #
   BaseLib
-  PcdLib
-  PciLib
-  IoLib
   DebugLib
-  HobLib
+  PcdLib
 
 [BuildOptions]
   *_*_*_CC_FLAGS  = -std=c11
@@ -56,19 +53,5 @@
 [BuildOptions.X64]
   *_*_*_CC_FLAGS = -I$(WORKSPACE)/StdLib/Include/X64
 
-
-[Protocols]
-  gEfiTimerArchProtocolGuid
-
-
-
 [Pcd]
-  gPcAtChipsetPkgTokenSpaceGuid.PcdAcpiIoPciBusNumber             ## CONSUMES
-  gPcAtChipsetPkgTokenSpaceGuid.PcdAcpiIoPciDeviceNumber          ## CONSUMES
-  gPcAtChipsetPkgTokenSpaceGuid.PcdAcpiIoPciFunctionNumber        ## CONSUMES
-  gPcAtChipsetPkgTokenSpaceGuid.PcdAcpiIoPciEnableRegisterOffset  ## CONSUMES
-  gPcAtChipsetPkgTokenSpaceGuid.PcdAcpiIoBarEnableMask            ## CONSUMES
-  gPcAtChipsetPkgTokenSpaceGuid.PcdAcpiIoPciBarRegisterOffset     ## CONSUMES
-  gPcAtChipsetPkgTokenSpaceGuid.PcdAcpiIoPortBaseAddress          ## CONSUMES
-  gPcAtChipsetPkgTokenSpaceGuid.PcdAcpiPm1TmrOffset               ## CONSUMES
-  gPcAtChipsetPkgTokenSpaceGuid.PcdAcpiIoPortBaseAddressMask      ## CONSUMES
+  gUefiCpuPkgTokenSpaceGuid.PcdCpuCoreCrystalClockFrequency  ## CONSUMES
