@@ -12,11 +12,13 @@
 #include <Uefi.h>
 
 
+#include <Library/HobLib.h>
+#include <Library/TimerLib.h>
+#include <PiDxe.h>
+
 #include <Library/BaseMemoryLib.h>
 
-static
-
-        UINT64 mAcpiTimerLibTscFrequency = 0;
+static UINT64 mAcpiTimerLibTscFrequency = 0;
 
 
 //TODO: this doesn't really work, use another implementation
@@ -266,19 +268,44 @@ int clock_gettime(clockid_t clockid, struct timespec* tp) {
 }
 
 
-/**
-  The constructor function enables ACPI IO space, and caches PerformanceCounterFrequency.
+int clock_getres(clockid_t clockid, struct timespec* res) {
+    switch (clockid) {
+        case CLOCK_REALTIME:
 
-  @param  ImageHandle   The firmware allocated handle for the EFI image.
-  @param  SystemTable   A pointer to the EFI System Table.
+            if (res == NULL) {
+                return 0;
+            }
 
-  @retval EFI_SUCCESS   The constructor always returns RETURN_SUCCESS.
+            res->tv_sec = 1;
+            res->tv_nsec = 0;
+            return 0;
+        case CLOCK_MONOTONIC:
+            UINT64 Frequency = InternalGetPerformanceCounterFrequency();
 
-**/
-EFI_STATUS
-EFIAPI
-OOpetrisSupportLibConstructorSupportClockDefault(IN EFI_HANDLE ImageHandle, IN EFI_SYSTEM_TABLE* SystemTable) {
-    return CommonAcpiTimerLibConstructor();
+            if (Frequency == 0) {
+                errno = ENOTSUP;
+                return -1;
+            }
+
+            if (Frequency >= 1000000000ULL) {
+                res->tv_sec = 0;
+                res->tv_nsec = 1;
+                return 0;
+            }
+
+            if (Frequency == 1) {
+                res->tv_sec = 1;
+                res->tv_nsec = 0;
+                return 0;
+            }
+
+            res->tv_sec = 0;
+            res->tv_nsec = 1000000000ULL / Frequency;
+            return 0;
+        default:
+            errno = ENOTSUP;
+            return -1;
+    }
 }
 
 
@@ -353,4 +380,19 @@ CommonAcpiTimerLibConstructor(VOID) {
     }
 
     return EFI_SUCCESS;
+}
+
+/**
+  The constructor function enables ACPI IO space, and caches PerformanceCounterFrequency.
+
+  @param  ImageHandle   The firmware allocated handle for the EFI image.
+  @param  SystemTable   A pointer to the EFI System Table.
+
+  @retval EFI_SUCCESS   The constructor always returns RETURN_SUCCESS.
+
+**/
+EFI_STATUS
+EFIAPI
+OOpetrisSupportLibConstructorSupportClockDefault(IN EFI_HANDLE ImageHandle, IN EFI_SYSTEM_TABLE* SystemTable) {
+    return CommonAcpiTimerLibConstructor();
 }
