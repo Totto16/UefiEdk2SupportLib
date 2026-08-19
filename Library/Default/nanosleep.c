@@ -1,13 +1,14 @@
 
-#include "../include/nanosleep.h"
-
+#include <SupportLib/nanosleep.h>
 
 #include <Library/BaseLib.h>
 #include <Library/UefiBootServicesTableLib.h>
 #include <Library/UefiLib.h>
 #include <Protocol/Timer.h>
 
-#include "../include/global.h"
+#include <Library/DebugLib.h>
+
+#include "./global.h"
 
 UINTN
 EFIAPI

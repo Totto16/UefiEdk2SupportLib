@@ -9,9 +9,9 @@
   CONSTRUCTOR                    = OOpetrisSupportLibConstructorDefault
 
 [Sources]
-  src/clock.c
-  src/nanosleep.c
-  src/global.c
+  clock.c
+  nanosleep.c
+  global.c
 
 [Packages]
   MdePkg/MdePkg.dec
@@ -44,8 +44,8 @@
 
   *_*_*_CC_FLAGS = -fvisibility=hidden
   *_*_*_CC_FLAGS = -D_REENTRANT
-  *_*_*_CCONLY_FLAGS = -I$(MODULE_DIR)/include
-  *_*_*_CCONLY_FLAGS = -I$(MODULE_DIR)/src
+  *_*_*_CCONLY_FLAGS = -I$(MODULE_DIR)/
+  *_*_*_CCONLY_FLAGS = -I$(MODULE_DIR)/../../include/
 
   *_*_*_CC_FLAGS = -I$(WORKSPACE)/StdLib/Include
 

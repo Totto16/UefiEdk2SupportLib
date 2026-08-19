@@ -2,6 +2,8 @@
 
 #include "./global.h"
 
+#include <Library/DebugLib.h>
+
 
 UINT64 gTimerPeriod = 0;
 EFI_TIMER_ARCH_PROTOCOL* gTimerAp = NULL;
