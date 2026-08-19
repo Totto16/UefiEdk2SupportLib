@@ -10,15 +10,15 @@
 
 static EFI_STATUS ClockGetTimeMonotonic(OUT struct timespec* Ts) {
     UINT64 Counter;
-    UINT64 Start;
-    UINT64 End;
-    UINT64 Frequency;
+
 
     if (Ts == NULL) {
         return EFI_INVALID_PARAMETER;
     }
 
-    Frequency = GetPerformanceCounterProperties(&Start, &End);
+    UINT64 Start;
+    UINT64 End;
+    UINT64 Frequency = GetPerformanceCounterProperties(&Start, &End);
 
     if (Frequency == 0) {
         return EFI_UNSUPPORTED;
@@ -52,6 +52,49 @@ int clock_gettime(clockid_t clockid, struct timespec* tp) {
                 errno = status & ~MAX_BIT;
                 return -1;
             }
+            return 0;
+        default:
+            errno = ENOTSUP;
+            return -1;
+    }
+}
+
+
+int clock_getres(clockid_t clockid, struct timespec* res) {
+    switch (clockid) {
+        case CLOCK_REALTIME:
+
+            if (res == NULL) {
+                return 0;
+            }
+
+            res->tv_sec = 1;
+            res->tv_nsec = 0;
+            return 0;
+        case CLOCK_MONOTONIC:
+            UINT64 Start;
+            UINT64 End;
+            UINT64 Frequency = GetPerformanceCounterProperties(&Start, &End);
+
+            if (Frequency == 0) {
+                errno = ENOTSUP;
+                return -1;
+            }
+
+            if (Frequency >= 1000000000ULL) {
+                res->tv_sec = 0;
+                res->tv_nsec = 1;
+                return 0;
+            }
+
+            if (Frequency == 1) {
+                res->tv_sec = 1;
+                res->tv_nsec = 0;
+                return 0;
+            }
+
+            res->tv_sec = 0;
+            res->tv_nsec = 1000000000ULL / Frequency;
             return 0;
         default:
             errno = ENOTSUP;

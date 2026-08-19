@@ -13,7 +13,10 @@
 extern "C" {
 #endif
 
+int clock_getres(clockid_t clockid, struct timespec* res);
+
 int clock_gettime(clockid_t clockid, struct timespec* tp);
+
 
 #ifdef __cplusplus
 }

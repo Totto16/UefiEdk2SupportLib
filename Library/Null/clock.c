@@ -24,3 +24,24 @@ int clock_gettime(clockid_t clockid, struct timespec* tp) {
             return -1;
     }
 }
+
+
+int clock_getres(clockid_t clockid, struct timespec* res) {
+    switch (clockid) {
+        case CLOCK_REALTIME:
+
+            if (res == NULL) {
+                return 0;
+            }
+
+            res->tv_sec = 1;
+            res->tv_nsec = 0;
+            return 0;
+        case CLOCK_MONOTONIC:
+            errno = ENOTSUP;
+            return -1;
+        default:
+            errno = ENOTSUP;
+            return -1;
+    }
+}
