@@ -1,0 +1,12 @@
+[Defines]
+  DEC_SPECIFICATION   = 1.25
+  PACKAGE_NAME                   = SupportLib
+  PACKAGE_GUID                   = c70e375c-d580-4789-b84f-49ccf0d11993
+  PACKAGE_VERSION                = 1.0.0
+
+[Includes]
+  include/
+
+
+[LibraryClasses]
+  ##TODO
