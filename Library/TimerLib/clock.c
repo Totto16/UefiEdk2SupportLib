@@ -7,7 +7,6 @@
 #include <Library/TimerLib.h>
 #include <Uefi.h>
 
-
 static EFI_STATUS ClockGetTimeMonotonic(OUT struct timespec* Ts) {
     UINT64 Counter;
 
@@ -26,9 +25,9 @@ static EFI_STATUS ClockGetTimeMonotonic(OUT struct timespec* Ts) {
 
     Counter = GetPerformanceCounter();
 
-    Ts->tv_sec = (INT64) (Counter / Frequency);
+    Ts->tv_sec = (time_t) (Counter / Frequency);
 
-    Ts->tv_nsec = (INT64) (((Counter % Frequency) * 1000000000ULL) / Frequency);
+    Ts->tv_nsec = (LONG32) (((Counter % Frequency) * 1000000000ULL) / Frequency);
 
     return EFI_SUCCESS;
 }
