@@ -1,0 +1,40 @@
+##  @file
+#  Provides interface to shell functionality for shell commands and applications.
+#
+#  Copyright (c) 2006 - 2018, Intel Corporation. All rights reserved. <BR>
+#
+#  SPDX-License-Identifier: BSD-2-Clause-Patent
+#
+#
+##
+
+[Defines]
+  INF_VERSION                    = 0x00010006
+  BASE_NAME                      = UefiShellCEntryLibDynamical
+  FILE_GUID                      = 71aa3562-9490-4998-b730-f6eb42ac298e
+  MODULE_TYPE                    = UEFI_APPLICATION
+  VERSION_STRING                 = 1.0
+  LIBRARY_CLASS                  = ShellCEntryLibDynamical|UEFI_APPLICATION UEFI_DRIVER
+
+#
+#  VALID_ARCHITECTURES           = IA32 X64 EBC
+#
+
+[Sources.common]
+  UefiShellCEntryLibDynamical.c
+
+[Packages]
+  MdePkg/MdePkg.dec
+  ShellPkg/ShellPkg.dec
+
+[LibraryClasses]
+  UefiApplicationEntryPoint
+  UefiRuntimeServicesTableLib
+  DebugLib
+
+
+[Protocols]
+  gEfiShellParametersProtocolGuid                         ## CONSUMES
+  gEfiShellInterfaceGuid                                  ## SOMETIMES_CONSUMES
+
+
