@@ -8,77 +8,103 @@
 
 #include <Library/DebugLib.h>
 
+#include <errno.h>
+
 
 static UINT64 gTimerPeriod = 0;
 static EFI_TIMER_ARCH_PROTOCOL* gTimerAp = NULL;
 static EFI_EVENT gTimerEvent = NULL;
 static VOID* gRegistration = NULL;
 
+#define TIMER_NOT_SUPPORTED 42
 
-UINTN
-EFIAPI
-Custom_NanoSecondDelay(IN UINTN NanoSeconds) {
+
+int TimerBasedNanosecondDelay(IN UINTN NanoSeconds, OUT UINT64* NanoSecondsRemaining) {
+
+
     // partially from EmulatorPkg/Library/DxeTimerLib/DxeTimerLib.c
-    EFI_STATUS Status;
-    UINT64 HundredNanoseconds;
+
+
+    if ((gTimerPeriod == 0) || ((UINT64) NanoSeconds < gTimerPeriod) || (EfiGetCurrentTpl() != TPL_APPLICATION)) {
+        *NanoSecondsRemaining = 0;
+        return TIMER_NOT_SUPPORTED;
+    }
+
+
+    //
+    // use gBS->WaitForEvent () to yield CPU to DXE Core
+    // this only has a resolution of gTimerPeriod ns, so otherwise use a CPU stall, or if there was an error in initiliazing the timer, or if we are not in an application context (TPL) as the timer doesn't work correctly in that context
+    //
+    UINT64 HundredNanoseconds = DivU64x32(NanoSeconds, 100);
+    EFI_STATUS Status = gBS->SetTimer(gTimerEvent, TimerRelative, HundredNanoseconds);
+    if (EFI_ERROR(Status)) {
+        *NanoSecondsRemaining = 0;
+        return 1;
+    }
     UINTN Index;
-
-    //TODO: donm't use asserts, rather return an error value
-    ASSERT(gTimerPeriod != 0);
-
-    ASSERT((EfiGetCurrentTpl() == TPL_APPLICATION));
-
-    ASSERT((UINT64) NanoSeconds > gTimerPeriod);
-
-    //
-    // This stall is long, so use gBS->WaitForEvent () to yield CPU to DXE Core
-    //
-
-    HundredNanoseconds = DivU64x32(NanoSeconds, 100);
-    Status = gBS->SetTimer(gTimerEvent, TimerRelative, HundredNanoseconds);
-    ASSERT_EFI_ERROR(Status);
-
     Status = gBS->WaitForEvent(sizeof(gTimerEvent) / sizeof(EFI_EVENT), &gTimerEvent, &Index);
-    ASSERT_EFI_ERROR(Status);
+    if (EFI_ERROR(Status)) {
+        *NanoSecondsRemaining = 0;
+        return 1;
+    }
 
-
-    return NanoSeconds;
+    *NanoSecondsRemaining = NanoSeconds - (HundredNanoseconds * 100);
+    return 0;
 }
 
-//TODO: there is another possible implementation:
-/*EFI_EVENT Event;
+int StallForNanoseconds(IN UINTN NanoSeconds, OUT UINT64* NanoSecondsRemaining) {
+    // stall the cpu without using timerlib
 
- gBS->CreateEvent (
-    EVT_TIMER,
-    TPL_CALLBACK,
-    NULL,
-    NULL,
-    &Event
-);
+    //if we are below 1000, we just over stall
+    if (NanoSeconds < 1000) {
+        NanoSeconds = 1000;
+    }
 
-gBS->SetTimer (
-    Event,
-    TimerRelative,
-    10 * 1000 * 10
-);
- */
+    UINTN Microseconds = DivU64x32(NanoSeconds, 1000);
 
+    EFI_STATUS Status = gBS->Stall(Microseconds);
+    if (EFI_ERROR(Status)) {
+        *NanoSecondsRemaining = 0;
+        return 1;
+    }
+
+    *NanoSecondsRemaining = NanoSeconds - (Microseconds * 1000);
+    return 0;
+}
 
 int nanosleep(const struct timespec* __req, struct timespec* __rem) {
-    // The nanosleep() function is not available on uefi. Therefore, we will call
-    // NanoSecondDelay
+    // The nanosleep() function is not available on uefi. Therefore, we will call use some helper functions (timer or stall)
 
     if (__req == NULL) {
         return -1;
     }
 
-    UINT64 ns = (UINT64) __req->tv_sec * 1000000000ULL + (UINT64) __req->tv_nsec;
+    UINT64 NanoSeconds = (UINT64) __req->tv_sec * 1000000000ULL + (UINT64) __req->tv_nsec;
 
-    Custom_NanoSecondDelay(ns);
+    UINT64 NanoSecondsRemaining = 0;
+
+    int res = TimerBasedNanosecondDelay(NanoSeconds, &NanoSecondsRemaining);
+
+    if (res == TIMER_NOT_SUPPORTED) {
+        res = StallForNanoseconds(NanoSeconds, &NanoSecondsRemaining);
+    }
+
+    if (res != 0) {
+        errno = EINVAL;
+        return -1;
+    }
+
+    ASSERT(NanoSecondsRemaining < 1000000000ULL);
+
 
     if (__rem != NULL) {
         __rem->tv_sec = 0;
-        __rem->tv_nsec = 0;
+        __rem->tv_nsec = NanoSecondsRemaining;
+    }
+
+    if (NanoSecondsRemaining != 0) {
+        errno = EINTR;
+        return -1;
     }
 
     return 0;
@@ -86,9 +112,8 @@ int nanosleep(const struct timespec* __req, struct timespec* __rem) {
 
 
 VOID EFIAPI RegisterTimerArchProtocol(IN EFI_EVENT Event, IN VOID* Context) {
-    EFI_STATUS Status;
 
-    Status = gBS->LocateProtocol(&gEfiTimerArchProtocolGuid, NULL, (VOID**) &gTimerAp);
+    EFI_STATUS Status = gBS->LocateProtocol(&gEfiTimerArchProtocolGuid, NULL, (VOID**) &gTimerAp);
     if (!EFI_ERROR(Status)) {
         Status = gTimerAp->GetTimerPeriod(gTimerAp, &gTimerPeriod);
         ASSERT_EFI_ERROR(Status);
@@ -119,7 +144,6 @@ OOpetrisSupportLibConstructorSupportNanosleepDefault(IN EFI_HANDLE ImageHandle, 
     EfiCreateProtocolNotifyEvent(
             &gEfiTimerArchProtocolGuid, TPL_CALLBACK, RegisterTimerArchProtocol, NULL, &gRegistration
     );
-
 
     return EFI_SUCCESS;
 }

@@ -14,6 +14,8 @@ int nanosleep(const struct timespec* __req, struct timespec* __rem) {
 
     UINT64 ns = (UINT64) __req->tv_sec * 1000000000ULL + (UINT64) __req->tv_nsec;
 
+    // thgis stalls, so it isn't a good solution,
+    //TODO: use the nanosleep from  the default helper, that uses timers, when the time is large
     NanoSecondDelay(ns);
 
     if (__rem != NULL) {
