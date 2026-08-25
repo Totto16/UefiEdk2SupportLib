@@ -1,0 +1,66 @@
+[Defines]
+  INF_VERSION = 1.25
+  BASE_NAME = MyEfiAppSdl2
+  FILE_GUID = edfa09cd-a327-4c42-af9d-445e6e50e9e1
+  MODULE_TYPE = UEFI_APPLICATION
+  VERSION_STRING = 1.0
+  ENTRY_POINT = ShellCEntryLibDynamical
+
+[Sources]
+  UefiMainSdl2.c
+  Color.c
+
+[Packages]
+  MdePkg/MdePkg.dec
+  OvmfPkg/OvmfPkg.dec
+  StdLib/StdLib.dec
+  ShellPkg/ShellPkg.dec
+  SDL2Pkg/SDL2Pkg.dec
+  SupportLib/SupportLib.dec
+
+[LibraryClasses]
+  UefiApplicationEntryPoint
+  UefiBootServicesTableLib
+  UefiLib
+  PcdLib
+  MemoryAllocationLib
+  DebugLib
+# shell libs
+  ShellCEntryLibDynamical
+# C Libs
+  LibC
+  LibCtype
+  LibLocale
+  LibMath
+  LibSignal
+  LibStdio
+  LibStdLib
+  LibString
+  LibTime
+  LibUefi
+  LibWchar
+  LibGdtoa
+#  sdl2
+  LibSDL2
+# Support library (Common custom functionality)
+  LibUEfiSupportNanosleep
+  LibUEfiSupportClock
+
+
+[Guids]
+
+[Ppis]
+
+[Protocols]
+
+[FeaturePcd]
+
+[Pcd]
+
+
+[BuildOptions]
+  *_*_*_CC_FLAGS  = -std=c11
+
+  *_*_*_CC_FLAGS = -D__UEFI__
+  *_*_*_CC_FLAGS = "-DEFIAPI=__attribute__((ms_abi))"
+  GCC:*_*_*_CC_FLAGS = -Wprio-ctor-dtor
