@@ -1,0 +1,81 @@
+[Defines]
+  INF_VERSION = 1.25
+  BASE_NAME = Example-Cpp
+  FILE_GUID = edfa09cd-a327-4c42-af9d-445e6e50e9e4
+  MODULE_TYPE = UEFI_APPLICATION
+  VERSION_STRING = 1.0
+  ENTRY_POINT = ShellCEntryLibDynamical
+
+[Sources]
+  Cpp.cpp
+
+[Packages]
+  MdePkg/MdePkg.dec
+  OvmfPkg/OvmfPkg.dec
+  LLVM/LLVMPkg.dec
+  StdLib/StdLib.dec
+  ShellPkg/ShellPkg.dec
+  SupportLib/SupportLib.dec
+
+[LibraryClasses]
+  UefiApplicationEntryPoint
+  UefiBootServicesTableLib
+  UefiLib
+  PcdLib
+  MemoryAllocationLib
+  DebugLib
+# shell libs
+  ShellCEntryLibDynamical
+# CPP Libs
+  LibCXX
+  LibCXXABI
+# C Libs
+  LibC
+  LibCtype
+  LibLocale
+  LibMath
+  LibSignal
+  LibStdio
+  LibStdLib
+  LibString
+  LibTime
+  LibUefi
+  LibWchar
+  LibGdtoa
+
+[Guids]
+
+[Ppis]
+
+[Protocols]
+
+[FeaturePcd]
+
+[Pcd]
+
+
+[BuildOptions]
+  *_*_*_CCONLY_FLAGS  = -std=c11
+  *_*_*_CXX_FLAGS = -std=c++23
+
+  *_*_*_CC_FLAGS = -D__UEFI__
+  *_*_*_CC_FLAGS = "-DEFIAPI=__attribute__((ms_abi))"
+  GCC:*_*_*_CC_FLAGS = -Wprio-ctor-dtor
+
+  *_*_*_CXX_FLAGS = "-fshort-wchar"
+  *_*_*_CXX_FLAGS = "-fno-builtin"
+  *_*_*_CXX_FLAGS = "-fno-strict-aliasing"
+  *_*_*_CXX_FLAGS = "-fno-common"
+  *_*_*_CXX_FLAGS = "-fstack-protector"
+  *_*_*_CXX_FLAGS = "-ffunction-sections"
+  *_*_*_CXX_FLAGS = "-fdata-sections"
+  *_*_*_CXX_FLAGS = "-fno-omit-frame-pointer"
+  *_*_*_CXX_FLAGS = "-fno-exceptions"
+  *_*_*_CXX_FLAGS = "-fno-threadsafe-statics"
+  *_*_*_CXX_FLAGS = "-fno-unwind-tables"
+  *_*_*_CXX_FLAGS = "-fno-asynchronous-unwind-tables"
+  *_*_*_CXX_FLAGS = "-nostdinc++"
+  *_*_*_CXX_FLAGS = "-nodefaultlibs"
+  *_*_*_CXX_FLAGS = "-nostdinc"
+  *_*_*_CXX_FLAGS = "-fstrict-enums"
+  *_*_*_CXX_FLAGS = "-fno-strict-aliasing"
