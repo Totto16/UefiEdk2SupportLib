@@ -1,9 +1,9 @@
 [Defines]
-  PLATFORM_NAME           = MyEfiAppSdl2
-  PLATFORM_GUID           = 8fd29a57-a693-4e11-bb17-dc46086af561
+  PLATFORM_NAME           = Example-Sdl2Cpp
+  PLATFORM_GUID           = 8fd29a57-a693-4e11-bb17-dc46086af562
   PLATFORM_VERSION        = 1.0
   DSC_SPECIFICATION       = 0x0001001B
-  OUTPUT_DIRECTORY        = Build/MyEfiAppSdl2
+  OUTPUT_DIRECTORY        = Build/Example/Sdl2Cpp
   SUPPORTED_ARCHITECTURES = X64
   BUILD_TARGETS           = DEBUG|RELEASE
   SKUID_IDENTIFIER        = DEFAULT
@@ -130,7 +130,7 @@
 
 
 [Components]
-  MyEfiAppSdl2/MyEfiAppSdl2.inf
+  Examples/Sdl2Cpp/Sdl2Cpp.inf
 
 [PcdsFixedAtBuild]
 #define DEBUG_WARN      0x00000002       // Warnings
@@ -160,4 +160,6 @@
   SDL2Pkg/SDL2Pkg.inf
 
 !include SDL2Pkg/SDL2Pkg.inc
+
+!include LLVM/LLVMPkg.inc
 

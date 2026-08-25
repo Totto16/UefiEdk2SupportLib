@@ -1,0 +1,9 @@
+{
+    "packagePaths": [
+        "../../../../../../..",
+        "",
+        ".."
+    ],
+    "dscPaths": [],
+    "buildDefines": []
+}

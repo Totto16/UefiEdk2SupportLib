@@ -1,13 +1,13 @@
 [Defines]
   INF_VERSION = 1.25
-  BASE_NAME = MyEfiAppSdl2Cpp
+  BASE_NAME = Example-Sdl2Cpp
   FILE_GUID = edfa09cd-a327-4c42-af9d-445e6e50e9e2
   MODULE_TYPE = UEFI_APPLICATION
   VERSION_STRING = 1.0
   ENTRY_POINT = ShellCEntryLibDynamical
 
 [Sources]
-  UefiMainSdl2Cpp.cpp
+  Sdl2Cpp.cpp
   Color.c
 
 [Packages]

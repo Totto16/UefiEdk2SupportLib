@@ -1,9 +1,9 @@
 [Defines]
-  PLATFORM_NAME           = MyEfiAppStdlib
-  PLATFORM_GUID           = 8fd29a57-a693-4e11-bb17-dc46086af563
+  PLATFORM_NAME           = Example-Bare
+  PLATFORM_GUID           = 8fd29a57-a693-4e11-bb17-dc46086af560
   PLATFORM_VERSION        = 1.0
   DSC_SPECIFICATION       = 0x0001001B
-  OUTPUT_DIRECTORY        = Build/MyEfiAppStdlib
+  OUTPUT_DIRECTORY        = Build/Example/Bare
   SUPPORTED_ARCHITECTURES = X64
   BUILD_TARGETS           = DEBUG|RELEASE
   SKUID_IDENTIFIER        = DEFAULT
@@ -55,9 +55,6 @@
   StackCheckLib|MdePkg/Library/StackCheckLib/StackCheckLib.inf
   StackCheckFailureHookLib|MdePkg/Library/StackCheckFailureHookLibNull/StackCheckFailureHookLibNull.inf
 
-!include StdLib/StdLib.inc
-
-
 [LibraryClasses.common.UEFI_APPLICATION]
   HobLib|MdePkg/Library/DxeHobLib/DxeHobLib.inf
   MemoryAllocationLib|MdePkg/Library/UefiMemoryAllocationLib/UefiMemoryAllocationLib.inf
@@ -73,17 +70,8 @@
   PciLib|MdePkg/Library/BasePciLibPciExpress/BasePciLibPciExpress.inf
   PciExpressLib|MdePkg/Library/BasePciExpressLib/BasePciExpressLib.inf
 
-  UefiHiiServicesLib|MdeModulePkg/Library/UefiHiiServicesLib/UefiHiiServicesLib.inf
-  HiiLib|MdeModulePkg/Library/UefiHiiLib/UefiHiiLib.inf
-
-  SafeIntLib|MdePkg/Library/BaseSafeIntLib/BaseSafeIntLib.inf
-
-
-  ShellCEntryLibDynamical|SupportLib/Library/UefiShellCEntryLibDynamical/UefiShellCEntryLibDynamical.inf
-
-
 [Components]
-  MyEfiAppStdlib/MyEfiAppStdlib.inf
+  Examples/Bare/Bare.inf
 
 [PcdsFixedAtBuild]
 #define DEBUG_WARN      0x00000002       // Warnings
@@ -103,6 +91,3 @@
 #define DEBUG_PROPERTY_ASSERT_DEADLOOP_ENABLED    0x20
 
   gEfiMdePkgTokenSpaceGuid.PcdDebugPropertyMask|0x3F
-
-  # disable auto initialize, initialize manually, and if it fails, use backup non shell code backup
-  gEfiShellPkgTokenSpaceGuid.PcdShellLibAutoInitialize|FALSE

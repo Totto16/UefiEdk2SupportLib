@@ -1,13 +1,13 @@
 [Defines]
   INF_VERSION = 1.25
-  BASE_NAME = MyEfiAppStdlib
+  BASE_NAME = Example-Stdlib
   FILE_GUID = edfa09cd-a327-4c42-af9d-445e6e50e9e3
   MODULE_TYPE = UEFI_APPLICATION
   VERSION_STRING = 1.0
   ENTRY_POINT = ShellCEntryLibDynamical
 
 [Sources]
-  UefiMainStdlib.c
+  Stdlib.c
 
 [Packages]
   MdePkg/MdePkg.dec

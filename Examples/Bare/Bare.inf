@@ -1,13 +1,13 @@
 [Defines]
   INF_VERSION = 1.25
-  BASE_NAME = MyEfiAppBare
+  BASE_NAME = Example-Bare
   FILE_GUID = edfa09cd-a327-4c42-af9d-445e6e50e9e0
   MODULE_TYPE = UEFI_APPLICATION
   VERSION_STRING = 1.0
   ENTRY_POINT = UefiMain
 
 [Sources]
-  UefiMainBare.c
+  Bare.c
 
 [Packages]
   MdePkg/MdePkg.dec
